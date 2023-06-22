@@ -1,45 +1,46 @@
-# fly.toml file generated for shaun-flex-stable-3 on 2023-01-24T10:42:59-06:00
+# fly.toml app configuration file generated for discussit-db on 2023-06-22T16:03:55-04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
 
-
+app = "discussit-db"
+primary_region = "ord"
 kill_signal = "SIGINT"
-kill_timeout = 5
-processes = []
+kill_timeout = "5s"
 
 [env]
   PRIMARY_REGION = "ord"
 
+[[mounts]]
+  source = "pg_data"
+  destination = "/data"
+
 [checks]
   [checks.pg]
-    grace_period = "30s"
+    port = 5500
+    type = "http"
     interval = "15s"
+    timeout = "10s"
+    grace_period = "30s"
     method = "get"
     path = "/flycheck/pg"
-    port = 5500
-    timeout = "10s"
-    type = "http"
-
-  [checks.vm]
-    grace_period = "1s"
-    interval = "1m"
-    method = "get"
-    path = "/flycheck/vm"
-    port = 5500
-    timeout = "10s"
-    type = "http"
-
   [checks.role]
-    grace_period = "30s"
+    port = 5500
+    type = "http"
     interval = "15s"
+    timeout = "10s"
+    grace_period = "30s"
     method = "get"
     path = "/flycheck/role"
+  [checks.vm]
     port = 5500
-    timeout = "10s"
     type = "http"
-
-[[mounts]]
-  destination = "/data"
-  source = "pg_data"
+    interval = "1m0s"
+    timeout = "10s"
+    grace_period = "1s"
+    method = "get"
+    path = "/flycheck/vm"
 
 [metrics]
-  path = "/metrics"
   port = 9187
+  path = "/metrics"
